@@ -7,7 +7,7 @@ import (
 
 // TestWordJsonMarshaling tests the JSON marshaling and unmarshaling of Word.
 func TestWordJsonMarshaling(t *testing.T) {
-	word := Word{Value: "Cellar"}
+	word := NewWord("Cellar")
 
 	// Marshal to JSON
 	jsonData, err := json.Marshal(word)
@@ -34,10 +34,8 @@ func TestWordJsonMarshaling(t *testing.T) {
 
 // TestRhymeWordJsonMarshaling tests the JSON marshaling and unmarshaling of RhymeWord.
 func TestRhymeWordJsonMarshaling(t *testing.T) {
-	rhymeWord := RhymeWord{
-		Word:  Word{Value: "Door"},
-		Rhyme: "A1",
-	}
+	rhymeWord := NewRhymeWord("Door")
+	rhymeWord.SetRhyme("A1")
 
 	// Marshal to JSON
 	jsonData, err := json.Marshal(rhymeWord)

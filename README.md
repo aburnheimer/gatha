@@ -5,13 +5,15 @@ Gāthā is a Sanskrit term for 'song' or 'verse', especially referring to any po
 ## Project Structure
 
 ```
-text-json-converter
+gatha
 ├── pkg
 │   └── gatha
-│       ├── word.go      # A struct to represent words in poetry
-│       └── word_test.go # Unit tests for the word struct
-├── go.mod                 # Module definition
-└── README.md              # Project documentation
+│       ├── testdata
+│       |   └── expected_....json  # Various test artifacts used in unit testing
+│       ├── ....go                 # Various structs representing aspects of poetic meter
+│       └── ..._test.go            # Unit tests for those structs
+├── go.mod                         # Module definition
+└── README.md                      # Project documentation
 ```
 
 ## Installation
@@ -28,6 +30,22 @@ Then, run:
 ```
 go mod tidy
 ```
+
+## Usage
+
+### Verse
+
+A poem's structure (Verse) is made up of Stanzas, which are groupings of Lines, and these Lines are themselves made up of Words. The library can import a Verse as simple text, where Lines are separated by single linefeeds (`\n`), and Stanzas are separated by double linefeeds (`\n\n`). This example has two Stanzas, each having two Lines, and several Words in all of those Lines:
+
+```
+The quick brown fox jumps over the lazy dog
+and in to the box, right next to the log.
+
+Her coat of reddish hues,
+the most lovely of views.
+```
+
+Each of the objects can be annotated accordingly, e.g. Words can have Rhyme info attached, Lines having a count of syllables, Stanzas having a rhyme pattern, etc. Please see embedded documentation for more info.
 
 ## Contributing
 

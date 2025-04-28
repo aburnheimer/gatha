@@ -2,6 +2,7 @@ package gatha
 
 import (
 	"encoding/json"
+	"os"
 	"testing"
 )
 
@@ -16,9 +17,12 @@ func TestLineJsonMarshaling(t *testing.T) {
 		t.Fatalf("Failed to marshal Line to JSON: %v", err)
 	}
 
-	expectedJson := `{"words":[{"value":"The"},{"value":"quick"},{"value":"brown"},{"value":"fox"},{"value":"jumps"},{"value":"over"},{"value":"the"},{"value":"lazy"},{"value":"dog"}]}`
+	expectedJson, err := os.ReadFile("testdata/expected_line.json")
+	if err != nil {
+		t.Fatalf("Failed to read test artifact file: %v", err)
+	}
 
-	if string(jsonData) != expectedJson {
+	if string(jsonData) != string(expectedJson) {
 		t.Errorf("Expected JSON %s, got %s", expectedJson, string(jsonData))
 	}
 

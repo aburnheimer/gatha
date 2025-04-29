@@ -13,6 +13,25 @@ type Line struct {
 	Words        []Word `json:"words"`
 }
 
+func (l *Line) AnnotateRhymeToWord(i int, s string) {
+	if i < 0 || i >= len(l.Words) {
+		panic(fmt.Sprintf("index %d out of bounds", i))
+	}
+
+	word := l.Words[i]
+	if rhymeWord, ok := word.(*RhymeWord); ok {
+		rhymeWord.Rhyme = s
+	} else {
+		// else if normalWord, ok := word.(*NormalWord); ok {
+		normalWord := word.(*NormalWord)
+		l.Words[i] = &RhymeWord{
+			NormalWord: *normalWord,
+			Rhyme:      s,
+		}
+	}
+	// else... panic("unsupported word type")
+}
+
 type MarshaledWords struct {
 	Words []struct {
 		Value string `json:"value"`

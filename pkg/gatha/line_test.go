@@ -119,3 +119,76 @@ func TestLineGetWordEmptyLine(t *testing.T) {
 		t.Errorf("Expected empty word for empty Line, got '%s'", word.GetValue())
 	}
 }
+
+// Replace a normal Word with one that has rhyme data annotation (RhymeWord)
+func TestLineReplacingWordWithRhymeWord(t *testing.T) {
+	originalText := "The quick brown fox jumps over the lazy dog"
+	line := NewLine(originalText)
+
+	word := line.GetWord(8)
+	if reflect.TypeOf(word).String() != "*gatha.NormalWord" {
+		t.Errorf("Expected Word to be of type NormalWord, got this instead %s", reflect.TypeOf(word).String())
+	}
+
+	line.AnnotateRhymeToWord(8, "A1")
+
+	word = line.GetWord(8)
+	if reflect.TypeOf(word).String() != "*gatha.RhymeWord" {
+		t.Errorf("Expected Word to be of type RhymeWord, got this instead %s", reflect.TypeOf(word).String())
+	}
+}
+
+// TestAnnotateRhymeToWordValidIndex tests annotating a word with a valid index.
+func TestAnnotateRhymeToWordValidIndex(t *testing.T) {
+	line := NewLine("The quick brown fox jumps over the lazy dog")
+	line.AnnotateRhymeToWord(3, "A1")
+
+	word := line.GetWord(3)
+	if rhymeWord, ok := word.(*RhymeWord); ok {
+		if rhymeWord.Rhyme != "A1" {
+			t.Errorf("Expected rhyme 'A1', got '%s'", rhymeWord.Rhyme)
+		}
+	} else {
+		t.Errorf("Expected word to be of type RhymeWord, got %T", word)
+	}
+}
+
+// TestAnnotateRhymeToWordInvalidNegativeIndex tests annotating a word with a negative index.
+func TestAnnotateRhymeToWordInvalidNegativeIndex(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("Expected panic for negative index, but no panic occurred")
+		}
+	}()
+
+	line := NewLine("The quick brown fox jumps over the lazy dog")
+	line.AnnotateRhymeToWord(-1, "A1")
+}
+
+// TestAnnotateRhymeToWordInvalidOutOfBoundsIndex tests annotating a word with an out-of-bounds index.
+func TestAnnotateRhymeToWordInvalidOutOfBoundsIndex(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("Expected panic for out-of-bounds index, but no panic occurred")
+		}
+	}()
+
+	line := NewLine("The quick brown fox jumps over the lazy dog")
+	line.AnnotateRhymeToWord(10, "A1")
+}
+
+// TestAnnotateRhymeToWordExistingRhymeWord tests annotating a word that is already a RhymeWord.
+func TestAnnotateRhymeToWordExistingRhymeWord(t *testing.T) {
+	line := NewLine("The quick brown fox jumps over the lazy dog")
+	line.AnnotateRhymeToWord(3, "A1")
+	line.AnnotateRhymeToWord(3, "B2")
+
+	word := line.GetWord(3)
+	if rhymeWord, ok := word.(*RhymeWord); ok {
+		if rhymeWord.Rhyme != "B2" {
+			t.Errorf("Expected updated rhyme 'B2', got '%s'", rhymeWord.Rhyme)
+		}
+	} else {
+		t.Errorf("Expected word to be of type RhymeWord, got %T", word)
+	}
+}

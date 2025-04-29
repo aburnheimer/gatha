@@ -18,7 +18,7 @@ func TestVerseJsonMarshaling(t *testing.T) {
 		t.Fatalf("Failed to marshal Verse to JSON: %v", err)
 	}
 
-	expectedJson, err := os.ReadFile("testdata/expected_verse.json")
+	expectedJson, err := os.ReadFile("test/expected_verse.json")
 	if err != nil {
 		t.Fatalf("Failed to read test artifact file: %v", err)
 	}

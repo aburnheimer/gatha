@@ -6,14 +6,12 @@ Gāthā is a Sanskrit term for 'song' or 'verse', especially referring to any po
 
 ```
 gatha
-├── pkg
-│   └── gatha
-│       ├── testdata
-│       |   └── expected_....json  # Various test artifacts used in unit testing
-│       ├── ....go                 # Various structs representing aspects of poetic meter
-│       └── ..._test.go            # Unit tests for those structs
-├── go.mod                         # Module definition
-└── README.md                      # Project documentation
+├── test
+|   └── expected_....json  # Various test artifacts used in unit testing
+├── ....go                 # Various structs representing aspects of poetic meter
+├── ..._test.go            # Unit tests for those structs
+├── go.mod                 # Module definition
+└── README.md              # Project documentation
 ```
 
 ## Installation

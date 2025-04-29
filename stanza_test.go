@@ -17,7 +17,7 @@ func TestStanzaJsonMarshaling(t *testing.T) {
 		t.Fatalf("Failed to marshal Stanza to JSON: %v", err)
 	}
 
-	expectedJson, err := os.ReadFile("testdata/expected_stanza.json")
+	expectedJson, err := os.ReadFile("test/expected_stanza.json")
 	if err != nil {
 		t.Fatalf("Failed to read test artifact file: %v", err)
 	}

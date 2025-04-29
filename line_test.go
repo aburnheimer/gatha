@@ -18,7 +18,7 @@ func TestLineJsonMarshaling(t *testing.T) {
 		t.Fatalf("Failed to marshal Line to JSON: %v", err)
 	}
 
-	expectedJson, err := os.ReadFile("testdata/expected_line.json")
+	expectedJson, err := os.ReadFile("test/expected_line.json")
 	if err != nil {
 		t.Fatalf("Failed to read test artifact file: %v", err)
 	}

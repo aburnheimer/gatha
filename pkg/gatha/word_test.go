@@ -7,7 +7,7 @@ import (
 
 // TestWordJsonMarshaling tests the JSON marshaling and unmarshaling of Word.
 func TestWordJsonMarshaling(t *testing.T) {
-	word := NewWord("Cellar")
+	word := NewNormalWord("Cellar")
 
 	// Marshal to JSON
 	jsonData, err := json.Marshal(word)
@@ -21,14 +21,14 @@ func TestWordJsonMarshaling(t *testing.T) {
 	}
 
 	// Unmarshal from JSON
-	var unmarshaledWord Word
+	var unmarshaledWord NormalWord
 	err = json.Unmarshal(jsonData, &unmarshaledWord)
 	if err != nil {
 		t.Fatalf("Failed to unmarshal JSON to Word: %v", err)
 	}
 
-	if unmarshaledWord.Value != word.Value {
-		t.Errorf("Expected Word value %s, got %s", word.Value, unmarshaledWord.Value)
+	if unmarshaledWord.GetValue() != word.GetValue() {
+		t.Errorf("Expected Word value %s, got %s", word.GetValue(), unmarshaledWord.GetValue())
 	}
 }
 
@@ -55,8 +55,58 @@ func TestRhymeWordJsonMarshaling(t *testing.T) {
 		t.Fatalf("Failed to unmarshal JSON to RhymeWord: %v", err)
 	}
 
-	if unmarshaledRhymeWord.Value != rhymeWord.Value || unmarshaledRhymeWord.Rhyme != rhymeWord.Rhyme {
+	if unmarshaledRhymeWord.GetValue() != rhymeWord.GetValue() || unmarshaledRhymeWord.GetRhyme() != rhymeWord.GetRhyme() {
 		t.Errorf("Expected RhymeWord value %s and rhyme %s, got value %s and rhyme %s",
-			rhymeWord.Value, rhymeWord.Rhyme, unmarshaledRhymeWord.Value, unmarshaledRhymeWord.Rhyme)
+			rhymeWord.GetValue(), rhymeWord.GetRhyme(), unmarshaledRhymeWord.Value, unmarshaledRhymeWord.Rhyme)
+	}
+}
+
+// TestNormalWordUnmarshalJSONInvalidFormat tests that an error is raised when the JSON format is invalid.
+func TestNormalWordUnmarshalJSONInvalidFormat(t *testing.T) {
+	invalidJson := `{"value":123}`
+
+	var unmarshaledNormalWord NormalWord
+	err := json.Unmarshal([]byte(invalidJson), &unmarshaledNormalWord)
+	if err == nil {
+		t.Errorf("Expected an error due to invalid JSON format, but got nil")
+	}
+}
+
+// TestRhymeWordUnmarshalJSONInvalidFormat tests that an error is raised when the JSON format is invalid.
+func TestRhymeWordUnmarshalJSONInvalidFormat(t *testing.T) {
+	invalidJson := `{"value":"dog","rhyme":123}`
+
+	var unmarshaledRhymeWord RhymeWord
+	err := json.Unmarshal([]byte(invalidJson), &unmarshaledRhymeWord)
+	if err == nil {
+		t.Errorf("Expected an error due to invalid JSON format, but got nil")
+	}
+
+	invalidJson = `{"value":123,"rhyme":"A1"}`
+	err = json.Unmarshal([]byte(invalidJson), &unmarshaledRhymeWord)
+	if err == nil {
+		t.Errorf("Expected an error due to invalid JSON format, but got nil")
+	}
+}
+
+// TestUnmarshalJSONInvalidForNormalWordStruct tests that an error is raised when the JSON is in a bad format.
+func TestUnmarshalJSONInvalidForNormalWordStruct(t *testing.T) {
+	invalidJson := `[ 123, 456 ]`
+
+	var unmarshaledNormalWord NormalWord
+	err := json.Unmarshal([]byte(invalidJson), &unmarshaledNormalWord)
+	if err == nil {
+		t.Errorf("No error was raised, but it should have been")
+	}
+}
+
+// TestUnmarshalJSONInvalidForRhymeWordStruct tests that an error is raised when the JSON is in a bad format.
+func TestUnmarshalJSONInvalidForRhymeWordStruct(t *testing.T) {
+	invalidJson := `[ 123, 456 ]`
+
+	var unmarshaledRhymeWord RhymeWord
+	err := json.Unmarshal([]byte(invalidJson), &unmarshaledRhymeWord)
+	if err == nil {
+		t.Errorf("No error was raised, but it should have been")
 	}
 }
